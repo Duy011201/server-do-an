@@ -14,7 +14,7 @@ const connection = mysql.createConnection({
 
 // Custom (không chỉnh sửa đoạn code bên dưới)
 export const getAll = (res, tableName, queryCondition) => {
-  const query = `SELECT * FROM ${tableName}`;
+  let query = `SELECT * FROM ${tableName}`;
   query += queryCondition;
   connection.query(query, (error, results) => {
     if (error) {
@@ -29,7 +29,7 @@ export const getAll = (res, tableName, queryCondition) => {
       .status(200)
       .json({ msg: constant.msg.GET_SUCCESS, data: results });
   });
-}
+};
 
 export const getByID = (req, res, tableName) => {
   if (
@@ -64,7 +64,7 @@ export const getByID = (req, res, tableName) => {
         .json({ msg: constant.msg.GET_SUCCESS, data: results });
     }
   );
-}
+};
 
 export const deleteByID = (req, res, tableName) => {
   if (
@@ -98,7 +98,7 @@ export const deleteByID = (req, res, tableName) => {
       return res.status(200).json({ msg: constant.msg.DELETE_SUCCESS });
     }
   );
-}
+};
 
 export const create = (req, res, tableName, newData) => {
   for (let key in newData) {
@@ -132,4 +132,51 @@ export const create = (req, res, tableName, newData) => {
       });
     }
   );
-}
+};
+
+export const update = (req, res, tableName, updateData) => {
+  if (
+    req.query.id === undefined ||
+    req.query.id === null ||
+    req.query.id === ""
+  ) {
+    console.error(`Error querying update by id table name ${tableName}`);
+    res.status(500).json({
+      query: `Error querying update by id table name ${tableName}`,
+      msg: constant.msg.SERVER_ERROR,
+    });
+    return;
+  }
+
+  for (let key in updateData) {
+    if (
+      updateData[key] === undefined ||
+      updateData[key] === null ||
+      updateData[key] === ""
+    ) {
+      console.error(`Error querying update data table name ${tableName}`);
+      res.status(500).json({ msg: constant.msg.SERVER_ERROR });
+      return;
+    }
+  }
+
+  connection.query(
+    `UPDATE ${tableName} SET ? WHERE id = ?`,
+    [updateData, req.query.id],
+    (error, result) => {
+      if (error) {
+        console.error("Error creating role:", error);
+        res.status(500).json({
+          query: `Error querying update data table name ${tableName}`,
+          msg: constant.msg.SERVER_ERROR,
+        });
+        return;
+      }
+
+      res.json({
+        message: constant.msg.UPDATE_SUCCESS,
+        newDataId: result.insertId,
+      });
+    }
+  );
+};

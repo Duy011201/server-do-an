@@ -1,5 +1,5 @@
 import constant from "./constant.js";
-import { getAll, getByID, create, deleteByID } from "./core.js";
+import { getAll, getByID, create, update, deleteByID } from "./core.js";
 
 // Role
 export const getAllRole = (req, res) => {
@@ -42,4 +42,40 @@ export const createComment = (req, res) => {
   };
 
   return create(req, res, constant.tableNameBD.COMMENTS, newComment);
+};
+
+export const updateCommentByID = (req, res) => {
+  const updateComment = {
+    userID: req.body.userID,
+    productID: req.body.productID,
+    noiDung: req.body.noiDung,
+    status: req.body.status,
+  };
+
+  return update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+};
+
+// Product
+export const getAllProduct = (req, res) => {
+  const queryCondition = "";
+  return getAll(res, constant.tableNameBD.PRODUCTS, queryCondition);
+};
+
+export const createProduct = (req, res) => {
+  const newComment = {
+    userID: req.body.userID,
+    productID: req.body.productID,
+    noiDung: req.body.noiDung,
+    promotionID: req.body.promotionID,
+    supplierID: req.body.supplierID,
+    ten: req.body.ten,
+    moTa: req.body.moTa,
+    heDieuHanh: req.body.heDieuHanh,
+    anh: req.body.anh,
+    donGia: req.body.donGia,
+    baoHanh: req.body.baoHanh,
+    mauSac: req.body.mauSac,
+  };
+
+  return create(req, res, constant.tableNameBD.PRODUCTS, newComment);
 };
