@@ -8,9 +8,13 @@ const constant = {
     SERVER_ERROR: "Internal Server Error",
   },
   tableNameBD: {
-    ROLES: 'roles',
-    COMMENTS: 'comments',
-  }
+    ROLES: "roles",
+    COMMENTS: "comments",
+  },
+  commentStatus: {
+    PENDING: "pending",
+    APPROVED: "approved",
+  },
 };
 
 export default constant;
