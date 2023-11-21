@@ -13,57 +13,83 @@ const connection = mysql.createConnection({
 });
 
 // Custom (không chỉnh sửa đoạn code bên dưới)
-export const getAll = (res, tableName, queryCondition) => {
-  let query = `SELECT * FROM ${tableName}`;
-  query += queryCondition;
+
+/**
+ *
+ * @param {response api} res
+ * @param {table name in database} tableName
+ * @param {query condition} queryCondition
+ * @param {query search} querySearch
+ */
+export const getAll = (res, tableName, queryCondition, querySearch) => {
+  let query = "";
+  if (
+    queryCondition === undefined ||
+    queryCondition === null ||
+    queryCondition.length === 0
+  ) {
+    query = `SELECT * FROM ${tableName}`;
+    query += querySearch;
+  } else {
+    query += queryCondition;
+    query += querySearch;
+  }
+
+  console.log(query);
+
   connection.query(query, (error, results) => {
     if (error) {
       console.error(`Error querying get all table name ${tableName}`, error);
-      res.status(500).json({
+      res.status(constant.code.SERVER_ERROR).json({
         query: `Error querying get all table name ${tableName}`,
         msg: constant.msg.SERVER_ERROR,
       });
       return;
     }
     return res
-      .status(200)
+      .status(constant.code.OK)
       .json({ msg: constant.msg.GET_SUCCESS, data: results });
   });
 };
 
-export const getByID = (req, res, tableName) => {
+export const getByID = (req, res, tableName, queryCondition) => {
   if (
     req.query.id === undefined ||
     req.query.id === null ||
     req.query.id === ""
   ) {
     console.error(`Error querying get by id table name ${tableName}`);
-    res.status(500).json({
+    res.status(constant.code.SERVER_ERROR).json({
       query: `Error querying get by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
     return;
   }
 
-  connection.query(
-    `SELECT * FROM ${tableName} WHERE ${req.query.id}`,
-    (error, results) => {
-      if (error) {
-        console.error(
-          `Error querying get by id table name ${tableName}`,
-          error
-        );
-        res.status(500).json({
-          query: `Error querying get by id table name ${tableName}`,
-          msg: constant.msg.SERVER_ERROR,
-        });
-        return;
-      }
-      return res
-        .status(200)
-        .json({ msg: constant.msg.GET_SUCCESS, data: results });
+  let query = "";
+  if (
+    queryCondition === undefined ||
+    queryCondition === null ||
+    queryCondition.length === 0
+  ) {
+    query = `SELECT * FROM ${tableName} WHERE ${req.query.id}`;
+  } else {
+    query += queryCondition;
+  }
+
+  connection.query(query, (error, results) => {
+    if (error) {
+      console.error(`Error querying get by id table name ${tableName}`, error);
+      res.status(constant.code.SERVER_ERROR).json({
+        query: `Error querying get by id table name ${tableName}`,
+        msg: constant.msg.SERVER_ERROR,
+      });
+      return;
     }
-  );
+    return res
+      .status(constant.code.OK)
+      .json({ msg: constant.msg.GET_SUCCESS, data: results });
+  });
 };
 
 export const deleteByID = (req, res, tableName) => {
@@ -73,7 +99,7 @@ export const deleteByID = (req, res, tableName) => {
     req.query.id === ""
   ) {
     console.error(`Error querying delete by id table name ${tableName}`);
-    res.status(500).json({
+    res.status(constant.code.SERVER_ERROR).json({
       query: `Error querying delete by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
@@ -89,13 +115,15 @@ export const deleteByID = (req, res, tableName) => {
           `Error querying delete by id table name ${tableName}`,
           error
         );
-        res.status(500).json({
+        res.status(constant.code.SERVER_ERROR).json({
           query: `Error querying delete by id table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
         return;
       }
-      return res.status(200).json({ msg: constant.msg.DELETE_SUCCESS });
+      return res
+        .status(constant.code.OK)
+        .json({ msg: constant.msg.DELETE_SUCCESS });
     }
   );
 };
@@ -108,7 +136,9 @@ export const create = (req, res, tableName, newData) => {
       newData[key] === ""
     ) {
       console.error(`Error querying create data table name ${tableName}`);
-      res.status(500).json({ msg: constant.msg.SERVER_ERROR });
+      res
+        .status(constant.code.SERVER_ERROR)
+        .json({ msg: constant.msg.SERVER_ERROR });
       return;
     }
   }
@@ -119,7 +149,7 @@ export const create = (req, res, tableName, newData) => {
     (error, result) => {
       if (error) {
         console.error("Error creating role:", error);
-        res.status(500).json({
+        res.status(constant.code.SERVER_ERROR).json({
           query: `Error querying create data table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
@@ -141,7 +171,7 @@ export const update = (req, res, tableName, updateData) => {
     req.query.id === ""
   ) {
     console.error(`Error querying update by id table name ${tableName}`);
-    res.status(500).json({
+    res.status(constant.code.SERVER_ERROR).json({
       query: `Error querying update by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
@@ -155,7 +185,9 @@ export const update = (req, res, tableName, updateData) => {
       updateData[key] === ""
     ) {
       console.error(`Error querying update data table name ${tableName}`);
-      res.status(500).json({ msg: constant.msg.SERVER_ERROR });
+      res
+        .status(constant.code.SERVER_ERROR)
+        .json({ msg: constant.msg.SERVER_ERROR });
       return;
     }
   }
@@ -166,14 +198,14 @@ export const update = (req, res, tableName, updateData) => {
     (error, result) => {
       if (error) {
         console.error("Error creating role:", error);
-        res.status(500).json({
+        res.status(constant.code.SERVER_ERROR).json({
           query: `Error querying update data table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
         return;
       }
 
-      res.json({
+      res.status(constant.code.OK).json({
         message: constant.msg.UPDATE_SUCCESS,
         newDataId: result.insertId,
       });

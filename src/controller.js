@@ -8,7 +8,8 @@ export const getAllRole = (req, res) => {
 };
 
 export const getByRoleID = (req, res) => {
-  return getByID(req, res, constant.tableNameBD.ROLES);
+  let queryCondition = "";
+  return getByID(req, res, constant.tableNameBD.ROLES, queryCondition);
 };
 
 export const createRole = (req, res) => {
@@ -21,12 +22,37 @@ export const createRole = (req, res) => {
 
 // CommentReview
 export const getAllComment = (req, res) => {
-  const queryCondition = "";
-  return getAll(res, constant.tableNameBD.COMMENTS, queryCondition);
+  const queryCondition =
+    "SELECT cm.id, cm.noiDung, cm.trangThai, cm.ngayTao, cm.ngaySua, pd.ten as tenSanPham, us.email, us.hoten" +
+    " FROM comments as cm" +
+    " INNER JOIN users as us ON us.id = cm.userID" +
+    " INNER JOIN products as pd ON pd.id = cm.productID";
+
+  let querySearch = "";
+
+  if (Object.keys(req.query).length !== 0) {
+    querySearch += " WHERE ";
+
+    if (req.query.tenSanPham) {
+      querySearch += "pd.ten like " + `'${req.query.tenSanPham}'`;
+    }
+
+    if (req.query.hoten) {
+      querySearch += "us.hoten like " + `'${req.query.hoten}'`;
+    }
+  }
+
+  return getAll(
+    res,
+    constant.tableNameBD.COMMENTS,
+    queryCondition,
+    querySearch
+  );
 };
 
 export const getCommentByID = (req, res) => {
-  return getByID(req, res, constant.tableNameBD.COMMENTS);
+  const queryCondition = "";
+  return getByID(req, res, constant.tableNameBD.COMMENTS, queryCondition);
 };
 
 export const deleteCommentByID = (req, res) => {
@@ -38,7 +64,7 @@ export const createComment = (req, res) => {
     userID: req.body.userID,
     productID: req.body.productID,
     noiDung: req.body.noiDung,
-    status: constant.commentStatus.PENDING,
+    trangThai: constant.commentStatus.PENDING,
   };
 
   return create(req, res, constant.tableNameBD.COMMENTS, newComment);
@@ -49,7 +75,7 @@ export const updateCommentByID = (req, res) => {
     userID: req.body.userID,
     productID: req.body.productID,
     noiDung: req.body.noiDung,
-    status: req.body.status,
+    trangThai: req.body.trangThai
   };
 
   return update(req, res, constant.tableNameBD.COMMENTS, updateComment);
