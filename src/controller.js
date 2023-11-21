@@ -19,6 +19,17 @@ export const createRole = (req, res) => {
 
   return create(req, res, constant.tableNameBD.ROLES, newRole);
 };
+//LOGIN
+export const Login = (req, res) => {
+  const queryCondition = `SELECT * FROM ${constant.tableNameBD.USERS} as us where us.email = '${req.body.email}' and us.matKhau = '${req.body.matKhau}'`;
+  let querySearch = "";
+  return getAll(
+    res,
+    constant.tableNameBD.USERS,
+    queryCondition,
+    querySearch
+  );
+};
 
 // CommentReview
 export const getAllComment = (req, res) => {

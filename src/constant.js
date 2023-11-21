@@ -13,6 +13,7 @@ const constant = {
     SERVER_ERROR: 500
   },
   tableNameBD: {
+    USERS: "users",
     ROLES: "roles",
     COMMENTS: "comments",
     PRODUCTS: "products",
