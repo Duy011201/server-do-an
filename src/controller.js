@@ -75,7 +75,7 @@ export const updateCommentByID = (req, res) => {
     userID: req.body.userID,
     productID: req.body.productID,
     noiDung: req.body.noiDung,
-    trangThai: req.body.trangThai
+    trangThai: req.body.trangThai,
   };
 
   return update(req, res, constant.tableNameBD.COMMENTS, updateComment);
@@ -84,7 +84,13 @@ export const updateCommentByID = (req, res) => {
 // Product
 export const getAllProduct = (req, res) => {
   const queryCondition = "";
-  return getAll(res, constant.tableNameBD.PRODUCTS, queryCondition);
+  let querySearch = "";
+  return getAll(
+    res,
+    constant.tableNameBD.PRODUCTS,
+    queryCondition,
+    querySearch
+  );
 };
 
 export const createProduct = (req, res) => {
