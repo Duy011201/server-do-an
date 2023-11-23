@@ -23,7 +23,7 @@ export const createRole = (req, res) => {
 // CommentReview
 export const getAllComment = (req, res) => {
   const queryCondition =
-    "SELECT cm.id, cm.noiDung, cm.trangThai, cm.ngayTao, cm.ngaySua, pd.ten as tenSanPham, us.email, us.hoten" +
+    "SELECT cm.id, cm.productID, cm.noiDung, cm.trangThai, cm.ngayTao, cm.ngaySua, pd.ten as tenSanPham, us.email, us.hoten" +
     " FROM comments as cm" +
     " INNER JOIN users as us ON us.id = cm.userID" +
     " INNER JOIN products as pd ON pd.id = cm.productID";
@@ -72,18 +72,29 @@ export const createComment = (req, res) => {
 
 export const updateCommentByID = (req, res) => {
   const updateComment = {
-    userID: req.body.userID,
-    productID: req.body.productID,
+    id: req.body.id,
     noiDung: req.body.noiDung,
     trangThai: req.body.trangThai,
   };
 
-  return update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+  // update(req, res, constant.tableNameBD.PRODUCTS, {
+  //   id: req.body.productID,
+  //   ten: req.body.tenSanPham,
+  // });
+
+  update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+
+  return;
 };
 
 // Product
 export const getAllProduct = (req, res) => {
-  const queryCondition = "";
+  const queryCondition =
+    "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.baoHanh, pd.mauSac, pd.ngayTao, " +
+    " sp.ten as tenNhaCungCap, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
+    " FROM products as pd" +
+    " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
+    " INNER JOIN promotions as pt ON pt.id = pd.promotionID";
   let querySearch = "";
   return getAll(
     res,
@@ -94,10 +105,7 @@ export const getAllProduct = (req, res) => {
 };
 
 export const createProduct = (req, res) => {
-  const newComment = {
-    userID: req.body.userID,
-    productID: req.body.productID,
-    noiDung: req.body.noiDung,
+  const newProduct = {
     promotionID: req.body.promotionID,
     supplierID: req.body.supplierID,
     ten: req.body.ten,
@@ -109,5 +117,5 @@ export const createProduct = (req, res) => {
     mauSac: req.body.mauSac,
   };
 
-  return create(req, res, constant.tableNameBD.PRODUCTS, newComment);
+  return create(req, res, constant.tableNameBD.PRODUCTS, newProduct);
 };

@@ -35,20 +35,21 @@ export const getAll = (res, tableName, queryCondition, querySearch) => {
     query += querySearch;
   }
 
-  console.log(query);
-
   connection.query(query, (error, results) => {
     if (error) {
       console.error(`Error querying get all table name ${tableName}`, error);
       res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
         query: `Error querying get all table name ${tableName}`,
         msg: constant.msg.SERVER_ERROR,
       });
       return;
     }
-    return res
-      .status(constant.code.OK)
-      .json({ msg: constant.msg.GET_SUCCESS, data: results });
+    return res.status(constant.code.OK).json({
+      status: constant.code.OK,
+      msg: constant.msg.GET_SUCCESS,
+      data: results,
+    });
   });
 };
 
@@ -60,6 +61,7 @@ export const getByID = (req, res, tableName, queryCondition) => {
   ) {
     console.error(`Error querying get by id table name ${tableName}`);
     res.status(constant.code.SERVER_ERROR).json({
+      status: constant.code.SERVER_ERROR,
       query: `Error querying get by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
@@ -81,14 +83,17 @@ export const getByID = (req, res, tableName, queryCondition) => {
     if (error) {
       console.error(`Error querying get by id table name ${tableName}`, error);
       res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
         query: `Error querying get by id table name ${tableName}`,
         msg: constant.msg.SERVER_ERROR,
       });
       return;
     }
-    return res
-      .status(constant.code.OK)
-      .json({ msg: constant.msg.GET_SUCCESS, data: results });
+    return res.status(constant.code.OK).json({
+      status: constant.code.OK,
+      msg: constant.msg.GET_SUCCESS,
+      data: results,
+    });
   });
 };
 
@@ -100,6 +105,7 @@ export const deleteByID = (req, res, tableName) => {
   ) {
     console.error(`Error querying delete by id table name ${tableName}`);
     res.status(constant.code.SERVER_ERROR).json({
+      status: constant.code.SERVER_ERROR,
       query: `Error querying delete by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
@@ -116,6 +122,7 @@ export const deleteByID = (req, res, tableName) => {
           error
         );
         res.status(constant.code.SERVER_ERROR).json({
+          status: constant.code.SERVER_ERROR,
           query: `Error querying delete by id table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
@@ -123,23 +130,19 @@ export const deleteByID = (req, res, tableName) => {
       }
       return res
         .status(constant.code.OK)
-        .json({ msg: constant.msg.DELETE_SUCCESS });
+        .json({ status: constant.code.OK, msg: constant.msg.DELETE_SUCCESS });
     }
   );
 };
 
 export const create = (req, res, tableName, newData) => {
   for (let key in newData) {
-    if (
-      newData[key] === undefined ||
-      newData[key] === null ||
-      newData[key] === ""
-    ) {
+    if (newData[key] === undefined || newData[key] === null) {
       console.error(`Error querying create data table name ${tableName}`);
-      res
-        .status(constant.code.SERVER_ERROR)
-        .json({ msg: constant.msg.SERVER_ERROR });
-      return;
+      return res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
+        msg: constant.msg.SERVER_ERROR,
+      });
     }
   }
 
@@ -150,13 +153,15 @@ export const create = (req, res, tableName, newData) => {
       if (error) {
         console.error("Error creating role:", error);
         res.status(constant.code.SERVER_ERROR).json({
+          status: constant.code.SERVER_ERROR,
           query: `Error querying create data table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
         return;
       }
 
-      res.json({
+      return res.json({
+        status: constant.code.OK,
         message: constant.msg.CREATE_SUCCESS,
         newDataId: result.insertId,
       });
@@ -166,48 +171,45 @@ export const create = (req, res, tableName, newData) => {
 
 export const update = (req, res, tableName, updateData) => {
   if (
-    req.query.id === undefined ||
-    req.query.id === null ||
-    req.query.id === ""
+    updateData.id === undefined ||
+    updateData.id === null ||
+    updateData.id === ""
   ) {
     console.error(`Error querying update by id table name ${tableName}`);
-    res.status(constant.code.SERVER_ERROR).json({
+    return res.status(constant.code.SERVER_ERROR).json({
+      status: constant.code.SERVER_ERROR,
       query: `Error querying update by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
-    return;
   }
 
   for (let key in updateData) {
-    if (
-      updateData[key] === undefined ||
-      updateData[key] === null ||
-      updateData[key] === ""
-    ) {
+    if (updateData[key] === undefined || updateData[key] === null) {
       console.error(`Error querying update data table name ${tableName}`);
-      res
-        .status(constant.code.SERVER_ERROR)
-        .json({ msg: constant.msg.SERVER_ERROR });
-      return;
+      return res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
+        msg: constant.msg.SERVER_ERROR,
+      });
     }
   }
 
   connection.query(
     `UPDATE ${tableName} SET ? WHERE id = ?`,
-    [updateData, req.query.id],
+    [updateData, updateData.id],
     (error, result) => {
       if (error) {
         console.error("Error creating role:", error);
-        res.status(constant.code.SERVER_ERROR).json({
+        return res.status(constant.code.SERVER_ERROR).json({
+          status: constant.code.SERVER_ERROR,
           query: `Error querying update data table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
-        return;
       }
 
-      res.status(constant.code.OK).json({
-        message: constant.msg.UPDATE_SUCCESS,
-        newDataId: result.insertId,
+      return res.status(constant.code.OK).json({
+        status: constant.code.OK,
+        msg: constant.msg.UPDATE_SUCCESS,
+        updateDataId: result.affectedRows,
       });
     }
   );
