@@ -15,6 +15,7 @@ const constant = {
   tableNameBD: {
     ROLES: "roles",
     COMMENTS: "comments",
+    SUPPlIERS: "suppliers",
     PRODUCTS: "products",
   },
   commentStatus: {

@@ -10,6 +10,11 @@ import {
   deleteCommentByID,
   createProduct,
   getAllProduct,
+  deleteSupplierByID,
+  createSupplier,
+  updateSupplierByID,
+  getSupplierByID,
+  getAllSupplier,
 } from "./controller.js";
 
 const router = express.Router();
@@ -25,6 +30,13 @@ router.post("/comment", getCommentByID);
 router.post("/comment/update", updateCommentByID);
 router.post("/comment/create", createComment);
 router.post("/comment/delete", deleteCommentByID);
+
+// Supplier
+router.post("/supplier/all", getAllSupplier);
+router.post("/supplier", getSupplierByID);
+router.post("/supplier/update", updateSupplierByID);
+router.post("/supplier/create", createSupplier);
+router.post("/supplier/delete", deleteSupplierByID);
 
 // Product
 router.post("/product/create", createProduct);

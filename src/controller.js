@@ -76,15 +76,51 @@ export const updateCommentByID = (req, res) => {
     noiDung: req.body.noiDung,
     trangThai: req.body.trangThai,
   };
+  return update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+};
 
-  // update(req, res, constant.tableNameBD.PRODUCTS, {
-  //   id: req.body.productID,
-  //   ten: req.body.tenSanPham,
-  // });
+// Supplier
+export const getAllSupplier = (req, res) => {
+  const queryCondition = "";
+  let querySearch = "";
 
-  update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+  return getAll(
+    res,
+    constant.tableNameBD.SUPPlIERS,
+    queryCondition,
+    querySearch
+  );
+};
 
-  return;
+export const getSupplierByID = (req, res) => {
+  const queryCondition = "";
+  return getByID(req, res, constant.tableNameBD.SUPPlIERS, queryCondition);
+};
+
+export const deleteSupplierByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.SUPPlIERS);
+};
+
+export const createSupplier = (req, res) => {
+  const newSupplier = {
+    ten: req.body.ten,
+    diaChi: req.body.diaChi,
+    email: req.body.email,
+    sdt: req.body.sdt,
+  };
+
+  return create(req, res, constant.tableNameBD.SUPPlIERS, newSupplier);
+};
+
+export const updateSupplierByID = (req, res) => {
+  const updateSupplier = {
+    id: req.body.id,
+    ten: req.body.ten,
+    diaChi: req.body.diaChi,
+    email: req.body.email,
+    sdt: req.body.sdt,
+  };
+  return update(req, res, constant.tableNameBD.SUPPlIERS, updateSupplier);
 };
 
 // Product
@@ -124,8 +160,6 @@ export const getAllProduct = (req, res) => {
       querySearch += ` AND ${priceConditions}`;
     }
   }
-
-  console.log(querySearch);
 
   return getAll(
     res,
