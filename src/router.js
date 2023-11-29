@@ -15,20 +15,20 @@ import {
 const router = express.Router();
 
 // Role
-router.get("/role/all", getAllRole);
-router.get("/role", getByRoleID);
+router.post("/role/all", getAllRole);
+router.post("/role", getByRoleID);
 router.post("/role/create", createRole);
 
 // CommentReview
-router.get("/comment/all", getAllComment);
-router.get("/comment", getCommentByID);
+router.post("/comment/all", getAllComment);
+router.post("/comment", getCommentByID);
 router.post("/comment/update", updateCommentByID);
 router.post("/comment/create", createComment);
 router.post("/comment/delete", deleteCommentByID);
 
 // Product
 router.post("/product/create", createProduct);
-router.get("/product/all", getAllProduct);
+router.post("/product/all", getAllProduct);
 
 // router.post("/comment/update", getUpdateComment);
 // router.post("/comment/update", getDeleteComment);
