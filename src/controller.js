@@ -77,7 +77,7 @@ export const getAllComment = (req, res) => {
       querySearch += "pd.ten like " + `'${req.query.tenSanPham}'`;
     }
 
-    if (req.query.hoten) {
+    if (req.query.price) {
       querySearch += "us.hoten like " + `'${req.query.hoten}'`;
     }
   }
@@ -116,15 +116,51 @@ export const updateCommentByID = (req, res) => {
     noiDung: req.body.noiDung,
     trangThai: req.body.trangThai,
   };
+  return update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+};
 
-  // update(req, res, constant.tableNameBD.PRODUCTS, {
-  //   id: req.body.productID,
-  //   ten: req.body.tenSanPham,
-  // });
+// Supplier
+export const getAllSupplier = (req, res) => {
+  const queryCondition = "";
+  let querySearch = "";
 
-  update(req, res, constant.tableNameBD.COMMENTS, updateComment);
+  return getAll(
+    res,
+    constant.tableNameBD.SUPPlIERS,
+    queryCondition,
+    querySearch
+  );
+};
 
-  return;
+export const getSupplierByID = (req, res) => {
+  const queryCondition = "";
+  return getByID(req, res, constant.tableNameBD.SUPPlIERS, queryCondition);
+};
+
+export const deleteSupplierByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.SUPPlIERS);
+};
+
+export const createSupplier = (req, res) => {
+  const newSupplier = {
+    ten: req.body.ten,
+    diaChi: req.body.diaChi,
+    email: req.body.email,
+    sdt: req.body.sdt,
+  };
+
+  return create(req, res, constant.tableNameBD.SUPPlIERS, newSupplier);
+};
+
+export const updateSupplierByID = (req, res) => {
+  const updateSupplier = {
+    id: req.body.id,
+    ten: req.body.ten,
+    diaChi: req.body.diaChi,
+    email: req.body.email,
+    sdt: req.body.sdt,
+  };
+  return update(req, res, constant.tableNameBD.SUPPlIERS, updateSupplier);
 };
 
 // Product
@@ -136,6 +172,35 @@ export const getAllProduct = (req, res) => {
     " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
     " INNER JOIN promotions as pt ON pt.id = pd.promotionID";
   let querySearch = "";
+  if (req.body && req.body.producer && req.body.producer.length > 0) {
+    querySearch += ` AND sp.ten IN (${req.body.producer
+      .map((producer) => `'${producer}'`)
+      .join(", ")})`;
+  }
+
+  if (req.body && req.body.price && req.body.price.length > 0) {
+    let priceConditions = req.body.price
+      .map((key) => {
+        switch (key) {
+          case "<2":
+            return `(CAST(REPLACE(pd.donGia, ',', '') AS DECIMAL(10, 2)) < 2000000)`;
+          case "2-4":
+            return `(CAST(REPLACE(pd.donGia, ',', '') AS DECIMAL(10, 2)) BETWEEN 2000000 AND 4000000)`;
+          case "4-7":
+            return `(CAST(REPLACE(pd.donGia, ',', '') AS DECIMAL(10, 2)) BETWEEN 4000000 AND 7000000)`;
+          case ">7":
+            return `(CAST(REPLACE(pd.donGia, ',', '') AS DECIMAL(10, 2)) > 7000000)`;
+          default:
+            return "";
+        }
+      })
+      .join(" OR ");
+
+    if (priceConditions) {
+      querySearch += ` AND ${priceConditions}`;
+    }
+  }
+
   return getAll(
     res,
     constant.tableNameBD.PRODUCTS,
