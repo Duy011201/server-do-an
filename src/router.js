@@ -10,6 +10,13 @@ import {
   deleteCommentByID,
   createProduct,
   getAllProduct,
+
+  getAllPromotion,
+  createPromotion,
+  getPromotionByID,
+  updatePromotionByID,
+  deletePromotionByID,
+
   Login,
 } from "./controller.js";
 
@@ -35,5 +42,14 @@ router.get("/product/all", getAllProduct);
 
 // router.post("/comment/update", getUpdateComment);
 // router.post("/comment/update", getDeleteComment);
+
+
+// Promotion
+router.post("/promotion/all", getAllPromotion);
+router.post("/promotion", getPromotionByID);
+router.post("/promotion/update", updatePromotionByID);
+router.post("/promotion/create", createPromotion);
+router.post("/promotion/delete", deletePromotionByID);
+
 
 export default router;

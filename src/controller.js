@@ -122,3 +122,68 @@ export const createProduct = (req, res) => {
 
   return create(req, res, constant.tableNameBD.PRODUCTS, newComment);
 };
+
+
+// Promotion
+export const getAllPromotion = (req, res) => {
+  const queryCondition =
+    "SELECT pm.id, pm.productID, pm.noiDung, pm.giaTriGiam, pm.tuNgay, pm.denNgay, pm.ngayTao, pm.ngaySua, pd.ten as tenSanPham" +
+    " FROM promotions as pm" +
+    " INNER JOIN products as pd ON pd.id = pm.productID";
+
+  let querySearch = "";
+
+  if (Object.keys(req.query).length !== 0) {
+    querySearch += " WHERE ";
+
+    if (req.query.tenSanPham) {
+      querySearch += "pd.ten like " + `'${req.query.tenSanPham}'`;
+    }
+  }
+
+  return getAll(
+    res,
+    constant.tableNameBD.PROMOTIONS,
+    queryCondition,
+    querySearch
+  );
+};
+
+export const getPromotionByID = (req, res) => {
+  const queryCondition = "";
+  return getByID(req, res, constant.tableNameBD.PROMOTIONS, queryCondition);
+};
+
+export const deletePromotionByID = (req, res) => {
+  const deleteColumns = {
+    id: req.query.id,
+  };
+  return deleteByID(req, res, constant.tableNameBD.PROMOTIONS, deleteColumns);
+};
+
+export const createPromotion = (req, res) => {
+  const newPromotion = {
+    productID: req.body.productID,
+    noiDung: req.body.noiDung,
+    giaTriGiam: req.body.giaTriGiam,
+    tuNgay: req.body.tuNgay,
+    denNgay: req.body.denNgay,
+  };
+
+  return create(req, res, constant.tableNameBD.PROMOTIONS, newPromotion);
+};
+
+export const updatePromotionByID = (req, res) => {
+  const updatePromotion = {
+    productID: req.body.productID,
+    noiDung: req.body.noiDung,
+    giaTriGiam: req.body.giaTriGiam,
+    tuNgay: req.body.tuNgay,
+    denNgay: req.body.denNgay,
+  };
+  const updateColumns = {
+    id: req.body.id,
+  };
+
+  return update(req, res, constant.tableNameBD.PROMOTIONS, updatePromotion, updateColumns);
+};

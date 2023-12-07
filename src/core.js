@@ -92,14 +92,15 @@ export const getByID = (req, res, tableName, queryCondition) => {
   });
 };
 
-export const deleteByID = (req, res, tableName) => {
+export const deleteByID = (req, res, tableName, deleteColumns) => {
   if (
-    req.query.id === undefined ||
-    req.query.id === null ||
-    req.query.id === ""
+    Object.values(deleteColumns)[0] === undefined ||
+    Object.values(deleteColumns)[0] === null ||
+    Object.values(deleteColumns)[0] === ""
   ) {
     console.error(`Error querying delete by id table name ${tableName}`);
     res.status(constant.code.SERVER_ERROR).json({
+      status: constant.code.SERVER_ERROR,
       query: `Error querying delete by id table name ${tableName}`,
       msg: constant.msg.SERVER_ERROR,
     });
@@ -107,8 +108,8 @@ export const deleteByID = (req, res, tableName) => {
   }
 
   connection.query(
-    `DELETE FROM ${tableName} WHERE id = ?`,
-    req.query.id,
+    `DELETE FROM ${tableName} WHERE ${Object.keys(deleteColumns)[0]} = ?`,
+    Object.values(deleteColumns)[0],
     (error, results) => {
       if (error) {
         console.error(
@@ -116,6 +117,7 @@ export const deleteByID = (req, res, tableName) => {
           error
         );
         res.status(constant.code.SERVER_ERROR).json({
+          status: constant.code.SERVER_ERROR,
           query: `Error querying delete by id table name ${tableName}`,
           msg: constant.msg.SERVER_ERROR,
         });
@@ -123,10 +125,11 @@ export const deleteByID = (req, res, tableName) => {
       }
       return res
         .status(constant.code.OK)
-        .json({ msg: constant.msg.DELETE_SUCCESS });
+        .json({ status: constant.code.OK, msg: constant.msg.DELETE_SUCCESS });
     }
   );
 };
+
 
 export const create = (req, res, tableName, newData) => {
   for (let key in newData) {
@@ -164,11 +167,11 @@ export const create = (req, res, tableName, newData) => {
   );
 };
 
-export const update = (req, res, tableName, updateData) => {
+export const update = (req, res, tableName, updateData, updateColumns) => {
   if (
-    req.query.id === undefined ||
-    req.query.id === null ||
-    req.query.id === ""
+    Object.values(updateColumns)[0]  === undefined ||
+    Object.values(updateColumns)[0]  === null ||
+    Object.values(updateColumns)[0]  === ""
   ) {
     console.error(`Error querying update by id table name ${tableName}`);
     res.status(constant.code.SERVER_ERROR).json({
@@ -193,8 +196,8 @@ export const update = (req, res, tableName, updateData) => {
   }
 
   connection.query(
-    `UPDATE ${tableName} SET ? WHERE id = ?`,
-    [updateData, req.query.id],
+    `UPDATE ${tableName} SET ? WHERE ${Object.keys(updateColumns)[0]} = ?`,
+    [updateData, Object.values(updateColumns)[0]],
     (error, result) => {
       if (error) {
         console.error("Error creating role:", error);

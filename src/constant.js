@@ -17,6 +17,8 @@ const constant = {
     ROLES: "roles",
     COMMENTS: "comments",
     PRODUCTS: "products",
+    PROMOTIONS: "promotions",
+
   },
   commentStatus: {
     PENDING: "pending",
