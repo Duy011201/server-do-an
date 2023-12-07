@@ -10,9 +10,16 @@ import {
   deleteCommentByID,
   createProduct,
   getAllProduct,
+  Login,
+  createLogin,
+  getAllLogin,
 } from "./controller.js";
 
 const router = express.Router();
+//LOGIN
+router.post("/login", Login);
+router.post("/login/create", createLogin);
+router.get("/login/all", getAllLogin);
 
 // Role
 router.get("/role/all", getAllRole);

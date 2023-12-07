@@ -1,5 +1,5 @@
 import constant from "./constant.js";
-import { getAll, getByID, create, update, deleteByID } from "./core.js";
+import { getAll, getByID, create, update, deleteByID, signUpEmail } from "./core.js";
 
 // Role
 export const getAllRole = (req, res) => {
@@ -19,7 +19,47 @@ export const createRole = (req, res) => {
 
   return create(req, res, constant.tableNameBD.ROLES, newRole);
 };
+// LOGIN
+export const Login = (req, res) => {
+  const queryCondition = `SELECT * FROM ${constant.tableNameBD.USERS} as us where us.email = '${req.body.email}' and us.matKhau = '${req.body.matKhau}'`;
+  let querySearch = "";
+  return getAll(
+    res,
+    constant.tableNameBD.USERS,
+    queryCondition,
+    querySearch
+  );
+};
 
+export const getAllLogin = (req, res) => {
+  const queryCondition =
+    "SELECT us.id, us.hoten, us.email, us.sdt, us.matKhau, us.roleID, us.ngayTao, us.ngaySua, " +
+    " rl.code as tenQuyen" +
+    " FROM users as us" +
+    " INNER JOIN roles as rl ON rl.id = us.roleID";
+  let querySearch = "";
+
+  if (req.query.email) {
+    querySearch += "us.email like" + `'${req.query.email}'`;
+  }
+  return getAll(
+    res,
+    constant.tableNameBD.USERS,
+    queryCondition,
+    querySearch
+  );
+};
+export const createLogin = (req, res) => {
+  const newUser = {
+    hoten: req.body.username,
+    email: req.body.email,
+    sdt: "",
+    matKhau: req.body.password,
+    roleID: 1
+  };
+  return signUpEmail(req, res, newUser);
+  // return create(req, res, constant.tableNameBD.USERS, newUser);
+};
 // CommentReview
 export const getAllComment = (req, res) => {
   const queryCondition =
@@ -30,8 +70,8 @@ export const getAllComment = (req, res) => {
 
   let querySearch = "";
 
-  if (Object.keys(req.query).length !== 0) {
-    querySearch += " WHERE ";
+    if (Object.keys(req.query).length !== 0) {
+      querySearch += " WHERE ";
 
     if (req.query.tenSanPham) {
       querySearch += "pd.ten like " + `'${req.query.tenSanPham}'`;
