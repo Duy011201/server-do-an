@@ -9,28 +9,15 @@ import {
   updateCommentByID,
   deleteCommentByID,
   createProduct,
-<<<<<<< Updated upstream
-  Login,
-  createLogin,
-  getAllLogin,
-=======
   getAllProduct,
-// <<<<<<< HEAD
   Login,
   createLogin,
   getAllLogin,
-// =======
->>>>>>> Stashed changes
   deleteSupplierByID,
   createSupplier,
   updateSupplierByID,
   getSupplierByID,
   getAllSupplier,
-<<<<<<< Updated upstream
-
-=======
-// >>>>>>> a9b1247f6424a40baf4f08f5f2b8c72487f9cc65
->>>>>>> Stashed changes
 } from "./controller.js";
 
 const router = express.Router();
