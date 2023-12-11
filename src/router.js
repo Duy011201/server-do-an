@@ -10,11 +10,15 @@ import {
   deleteCommentByID,
   createProduct,
   getAllProduct,
+  getProductByID,
+  updateProductByID,
+  deleteProductByID,
   deleteSupplierByID,
   createSupplier,
   updateSupplierByID,
   getSupplierByID,
   getAllSupplier,
+  getAllPromotions,
 } from "./controller.js";
 
 const router = express.Router();
@@ -41,6 +45,13 @@ router.post("/supplier/delete", deleteSupplierByID);
 // Product
 router.post("/product/create", createProduct);
 router.post("/product/all", getAllProduct);
+router.post("/product", getProductByID);
+router.post("/product/update", updateProductByID);
+router.post("/product/delete", deleteProductByID);
+
+// Promptions
+router.post("/promotions/all", getAllPromotions);
+
 
 // router.post("/comment/update", getUpdateComment);
 // router.post("/comment/update", getDeleteComment);
