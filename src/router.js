@@ -13,6 +13,9 @@ import {
   getProductByID,
   updateProductByID,
   deleteProductByID,
+  Login,
+  createLogin,
+  getAllLogin,
   deleteSupplierByID,
   createSupplier,
   updateSupplierByID,
@@ -22,6 +25,10 @@ import {
 } from "./controller.js";
 
 const router = express.Router();
+//LOGIN
+router.post("/login", Login);
+router.post("/login/create", createLogin);
+router.get("/login/all", getAllLogin);
 
 // Role
 router.post("/role/all", getAllRole);
