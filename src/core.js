@@ -215,3 +215,25 @@ export const update = (req, res, tableName, updateData) => {
     }
   );
 };
+
+export const signUpEmail = (req, res, user) => {
+  connection.query(`SELECT * FROM users where users.email = "${user.email}"`, (error, result) => {
+    if (error) {
+      console.error(`Error querying by email`, error); 
+      res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
+        query: `Error querying by email`,
+        msg: constant.msg.SERVER_ERROR,
+      });
+      return;
+    }
+    if (result[0]) {
+      return res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
+        query: `Email is existed`,
+        msg: constant.msg.SERVER_ERROR,
+      });
+    }
+    return create(req, res, constant.tableNameBD.USERS, user);
+  });
+};
