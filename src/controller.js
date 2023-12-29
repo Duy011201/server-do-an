@@ -64,6 +64,19 @@ export const createRole= (req, res) => {
   return create(req, res, constant.tableNameBD.ROLES, newRole);
 };
 
+export const updateRoleByID = (req, res) => {
+  const updateRole = {
+    id : req.body.id,
+    code: req.body.code,
+  };
+
+  return update(req, res, constant.tableNameBD.ROLES, updateRole);
+};
+
+export const deleteRoleByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.ROLES);
+};
+
 // CommentReview
 export const getAllComment = (req, res) => {
   const queryCondition =

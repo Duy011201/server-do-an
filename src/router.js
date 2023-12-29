@@ -19,9 +19,9 @@ import {
   getProductByID,
   updateProductByID,
   deleteProductByID,
-  Login,
-  createLogin,
-  getAllLogin,
+  // Login,
+  // createLogin,
+  // getAllLogin,
   deleteSupplierByID,
   createSupplier,
   updateSupplierByID,
@@ -32,9 +32,9 @@ import {
 
 const router = express.Router();
 //LOGIN
-router.post("/login", Login);
-router.post("/login/create", createLogin);
-router.get("/login/all", getAllLogin);
+// router.post("/login", Login);
+// router.post("/login/create", createLogin);
+// router.get("/login/all", getAllLogin);
 
 // User
 router.post("/user/all", getAllUser);
