@@ -1,10 +1,54 @@
 import constant from "./constant.js";
 import { getAll, getByID, create, update, deleteByID } from "./core.js";
 
+// User
+export const getAllUser = (req,res) => {
+  const queryCondition = "SELECT us.id, us.ten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
+  let querySearch = "";
+  if (Object.keys(req.query).length !== 0) {
+    querySearch += " WHERE ";
+    if (req.query.code) {
+      querySearch += `users.roleID LIKE '${req.query.roleID}'`;
+    }
+  }
+  return getAll(res, constant.tableNameBD.USERS, queryCondition, querySearch);
+};
+
+export const createUser= (req, res) => {
+  const newRole = {
+    ten: req.body.ten,
+    email: req.body.email,
+    sdt: req.body.sdt,
+    matKhau: "123456",
+    roleID: req.body.roleID.join(",")
+  };
+
+  // console.log(newRole);
+
+  return create(req, res, constant.tableNameBD.USERS, newRole);
+};
+
+export const updateUserByID = (req, res) => {
+  const updateRole = {
+    id : req.body.id,
+    ten: req.body.ten,
+    email: req.body.email,
+    sdt: req.body.sdt,
+    matKhau: "123456",
+    roleID: req.body.roleID.join(",")
+  };
+
+  return update(req, res, constant.tableNameBD.USERS, updateRole);
+};
+
+export const deleteUserByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.USERS);
+};
 // Role
 export const getAllRole = (req, res) => {
-  const queryCondition = "";
-  return getAll(res, constant.tableNameBD.ROLES, queryCondition);
+  const queryCondition = "select * from roles";
+  let querySearch = "";
+  return getAll(res, constant.tableNameBD.ROLES, queryCondition, querySearch );
 };
 
 export const getByRoleID = (req, res) => {
@@ -12,12 +56,26 @@ export const getByRoleID = (req, res) => {
   return getByID(req, res, constant.tableNameBD.ROLES, queryCondition);
 };
 
-export const createRole = (req, res) => {
+export const createRole= (req, res) => {
   const newRole = {
-    code: req.body.code,
+    code: req.body.code 
   };
 
   return create(req, res, constant.tableNameBD.ROLES, newRole);
+};
+
+export const updateRoleByID = (req, res) => {
+  const updateRole = {
+    id : req.body.id,
+    code: req.body.code 
+  };
+
+  return update(req, res, constant.tableNameBD.ROLES, updateRole);
+};
+
+export const deleteRoleByID = (req, res) => {
+  
+  return deleteByID(req, res, constant.tableNameBD.ROLES);
 };
 
 // CommentReview
