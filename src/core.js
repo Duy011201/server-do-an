@@ -21,6 +21,7 @@ const connection = mysql.createConnection({
  * @param {query condition} queryCondition
  * @param {query search} querySearch
  */
+
 export const getAll = (res, tableName, queryCondition, querySearch) => {
   let query = "";
   if (
