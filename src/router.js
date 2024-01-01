@@ -1,7 +1,13 @@
 import express from "express";
 import {
+  getAllUser,
+  createUser,
+  updateUserByID,
+  deleteUserByID,
   getAllRole,
   createRole,
+  updateRoleByID,
+  deleteRoleByID,
   getAllComment,
   createComment,
   getByRoleID,
@@ -13,9 +19,9 @@ import {
   getProductByID,
   updateProductByID,
   deleteProductByID,
-  Login,
-  createLogin,
-  getAllLogin,
+  // Login,
+  // createLogin,
+  // getAllLogin,
   deleteSupplierByID,
   createSupplier,
   updateSupplierByID,
@@ -26,14 +32,22 @@ import {
 
 const router = express.Router();
 //LOGIN
-router.post("/login", Login);
-router.post("/login/create", createLogin);
-router.get("/login/all", getAllLogin);
+// router.post("/login", Login);
+// router.post("/login/create", createLogin);
+// router.get("/login/all", getAllLogin);
+
+// User
+router.post("/user/all", getAllUser);
+router.post("/user/create", createUser);
+router.post("/user/update", updateUserByID);
+router.post("/user/delete", deleteUserByID);
 
 // Role
 router.post("/role/all", getAllRole);
 router.post("/role", getByRoleID);
 router.post("/role/create", createRole);
+router.post("/role/update", updateRoleByID);
+router.post("/role/delete", deleteRoleByID);
 
 // CommentReview
 router.post("/comment/all", getAllComment);
