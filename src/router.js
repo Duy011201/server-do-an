@@ -9,34 +9,25 @@ import {
   updateCommentByID,
   deleteCommentByID,
   createProduct,
-<<<<<<< Updated upstream
-  Login,
-  createLogin,
-  getAllLogin,
-=======
   getAllProduct,
-// <<<<<<< HEAD
   Login,
   createLogin,
   getAllLogin,
-// =======
->>>>>>> Stashed changes
+  checkEmail,
   deleteSupplierByID,
   createSupplier,
   updateSupplierByID,
   getSupplierByID,
   getAllSupplier,
-<<<<<<< Updated upstream
-
-=======
-// >>>>>>> a9b1247f6424a40baf4f08f5f2b8c72487f9cc65
->>>>>>> Stashed changes
+  fogotPassword,
 } from "./controller.js";
 
 const router = express.Router();
 //LOGIN
+router.post("/forgot/checkemail",checkEmail);
 router.post("/login", Login);
 router.post("/login/create", createLogin);
+router.post("/forgot/update", fogotPassword);
 router.get("/login/all", getAllLogin);
 
 // Role
@@ -61,8 +52,5 @@ router.post("/supplier/delete", deleteSupplierByID);
 // Product
 router.post("/product/create", createProduct);
 router.post("/product/all", getAllProduct);
-
-// router.post("/comment/update", getUpdateComment);
-// router.post("/comment/update", getDeleteComment);
 
 export default router;

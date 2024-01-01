@@ -236,3 +236,64 @@ export const signUpEmail = (req, res, user) => {
     return create(req, res, constant.tableNameBD.USERS, user);
   });
 };
+
+export const forgotEmail = (req, res, user) => {
+  connection.query(`SELECT * FROM users where users.email = "${user.email}"`, (error, result) => {
+    if (error) {
+      console.error(`Error querying by email`, error); 
+      res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
+        query: `Error querying by email`,
+        msg: constant.msg.SERVER_ERROR,
+      });
+      return;
+    }
+      return res.status(constant.code.OK).json({
+        status: constant.code.OK,
+        data: result,
+        msg: constant.msg.OK,
+      });
+    return;
+  });
+};
+
+export const updatePassword = (req, res, updateLogin) => {
+  if (
+    updateLogin.matKhau === undefined ||
+    updateLogin.matKhau === null ||
+    updateLogin.matKhau === ""
+  ) {
+    console.error(`Error querying update by id table name `);
+    return res.status(constant.code.SERVER_ERROR).json({
+      status: constant.code.SERVER_ERROR,
+      msg: constant.msg.SERVER_ERROR,
+    });
+  }
+
+  connection.query(`SELECT * FROM users where users.email = "${updateLogin.email}"`,  (error, result) => {
+    if(error) {
+      console.log('error', error);
+      return error
+    }
+
+    if (result[0]) {
+      connection.query(`UPDATE users SET matKhau="${updateLogin.matKhau}" where users.id="${result[0].id}"`, (error, result) => {
+        if(error) {
+          console.log('error', error);
+          return error
+        }
+        res.status(constant.code.OK).json({
+          status: constant.code.OK,
+          msg: constant.msg.UPDATE_SUCCESS,
+        });
+      })
+    } else {
+      // email ko ton tai 
+      res.status(constant.code.SERVER_ERROR).json({
+        status: constant.code.SERVER_ERROR,
+        msg: constant.msg.SERVER_ERROR,
+      });
+    }
+  })
+  
+}

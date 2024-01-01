@@ -1,5 +1,5 @@
 import constant from "./constant.js";
-import { getAll, getByID, create, update, deleteByID, signUpEmail } from "./core.js";
+import { getAll, getByID, create, update, deleteByID, signUpEmail,forgotEmail, updatePassword } from "./core.js";
 
 // Role
 export const getAllRole = (req, res) => {
@@ -58,8 +58,29 @@ export const createLogin = (req, res) => {
     roleID: 1
   };
   return signUpEmail(req, res, newUser);
-  // return create(req, res, constant.tableNameBD.USERS, newUser);
 };
+export const checkEmail = (req, res)=>{
+  const checkEmail= {
+    id: req.body.id,
+    email: req.body.email,
+    hoten:"",
+    matKhau: "",
+    roleID:1
+  };
+
+  return forgotEmail(req,res,checkEmail);
+}
+
+export const fogotPassword = (req, res) => {
+
+  const updateLogin = {
+    email: req.body.email,
+    matKhau: req.body.matKhau,
+    roleID:1
+  };
+  return updatePassword(req, res, updateLogin);
+};
+
 // CommentReview
 export const getAllComment = (req, res) => {
   const queryCondition =
