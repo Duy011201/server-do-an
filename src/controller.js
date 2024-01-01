@@ -1,10 +1,54 @@
 import constant from "./constant.js";
 import { getAll, getByID, create, update, deleteByID, signUpEmail,forgotEmail, updatePassword } from "./core.js";
 
+// User
+export const getAllUser = (req,res) => {
+  const queryCondition = "SELECT us.id, us.ten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
+  let querySearch = "";
+  if (Object.keys(req.query).length !== 0) {
+    querySearch += " WHERE ";
+    if (req.query.code) {
+      querySearch += `users.roleID LIKE '${req.query.roleID}'`;
+    }
+  }
+  return getAll(res, constant.tableNameBD.USERS, queryCondition, querySearch);
+};
+
+export const createUser= (req, res) => {
+  const newRole = {
+    ten: req.body.ten,
+    email: req.body.email,
+    sdt: req.body.sdt,
+    matKhau: "123456",
+    roleID: req.body.roleID.join(",")
+  };
+
+  // console.log(newRole);
+
+  return create(req, res, constant.tableNameBD.USERS, newRole);
+};
+
+export const updateUserByID = (req, res) => {
+  const updateRole = {
+    id : req.body.id,
+    ten: req.body.ten,
+    email: req.body.email,
+    sdt: req.body.sdt,
+    matKhau: "123456",
+    roleID: req.body.roleID.join(",")
+  };
+
+  return update(req, res, constant.tableNameBD.USERS, updateRole);
+};
+
+export const deleteUserByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.USERS);
+};
 // Role
 export const getAllRole = (req, res) => {
-  const queryCondition = "";
-  return getAll(res, constant.tableNameBD.ROLES, queryCondition);
+  const queryCondition = "select * from roles";
+  let querySearch = "";
+  return getAll(res, constant.tableNameBD.ROLES, queryCondition, querySearch );
 };
 
 export const getByRoleID = (req, res) => {
@@ -12,13 +56,26 @@ export const getByRoleID = (req, res) => {
   return getByID(req, res, constant.tableNameBD.ROLES, queryCondition);
 };
 
-export const createRole = (req, res) => {
+export const createRole= (req, res) => {
   const newRole = {
-    code: req.body.code,
+    code: req.body.code 
   };
 
   return create(req, res, constant.tableNameBD.ROLES, newRole);
 };
+
+export const updateRoleByID = (req, res) => {
+  const updateRole = {
+    id : req.body.id,
+    code: req.body.code,
+  };
+  
+  return update(req, res, constant.tableNameBD.ROLES, updateRole);
+};
+export const deleteRoleByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.ROLES);
+};
+
 // LOGIN
 export const Login = (req, res) => {
   const queryCondition = `SELECT * FROM ${constant.tableNameBD.USERS} as us where us.email = '${req.body.email}' and us.matKhau = '${req.body.matKhau}'`;
@@ -80,6 +137,7 @@ export const fogotPassword = (req, res) => {
   };
   return updatePassword(req, res, updateLogin);
 };
+
 
 // CommentReview
 export const getAllComment = (req, res) => {
@@ -187,8 +245,8 @@ export const updateSupplierByID = (req, res) => {
 // Product
 export const getAllProduct = (req, res) => {
   const queryCondition =
-    "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.baoHanh, pd.mauSac, pd.ngayTao, " +
-    " sp.ten as tenNhaCungCap, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
+    "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.soLuong, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
+    " sp.ten as tenNhaCungCap, sp.id as supplierID, pd.id as promotionID, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
     " FROM products as pd" +
     " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
     " INNER JOIN promotions as pt ON pt.id = pd.promotionID";
@@ -231,6 +289,9 @@ export const getAllProduct = (req, res) => {
 };
 
 export const createProduct = (req, res) => {
+
+  console.log(req.body);
+  
   const newProduct = {
     promotionID: req.body.promotionID,
     supplierID: req.body.supplierID,
@@ -239,9 +300,55 @@ export const createProduct = (req, res) => {
     heDieuHanh: req.body.heDieuHanh,
     anh: req.body.anh,
     donGia: req.body.donGia,
+    soLuong: req.body.soLuong,
     baoHanh: req.body.baoHanh,
     mauSac: req.body.mauSac,
   };
 
   return create(req, res, constant.tableNameBD.PRODUCTS, newProduct);
 };
+
+export const getProductByID = (req, res) => {
+  const queryCondition = "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.soLuong, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
+  " sp.ten as tenNhaCungCap, sp.id as supplierID, pd.id as promotionID, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
+  " FROM products as pd" +
+  " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
+  " INNER JOIN promotions as pt ON pt.id = pd.promotionID"+
+   ` WHERE pd.id = ${req.query.id}`;
+  return getByID(req, res, constant.tableNameBD.PRODUCTS, queryCondition);
+};
+
+export const updateProductByID = (req, res) => {
+  const updateProduct = {
+    id: req.body.id,
+    promotionID: req.body.promotionID,
+    supplierID: req.body.supplierID,
+    ten: req.body.ten,
+    moTa: req.body.moTa,
+    heDieuHanh: req.body.heDieuHanh,
+    anh: req.body.anh,
+    donGia: req.body.donGia,
+    soLuong: req.body.soLuong,
+    baoHanh: req.body.baoHanh,
+    mauSac: req.body.mauSac,
+  };
+  return update(req, res, constant.tableNameBD.PRODUCTS, updateProduct);
+};
+
+export const deleteProductByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.PRODUCTS);
+};
+
+//Promotions
+export const getAllPromotions = (req, res) => {
+  const queryCondition = "";
+  let querySearch = "";
+
+  return getAll(
+    res,
+    constant.tableNameBD.PROMOTIONS,
+    queryCondition,
+    querySearch
+  );
+};
+
