@@ -166,7 +166,7 @@ export const updateSupplierByID = (req, res) => {
 // Product
 export const getAllProduct = (req, res) => {
   const queryCondition =
-    "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
+    "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.soLuong, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
     " sp.ten as tenNhaCungCap, sp.id as supplierID, pd.id as promotionID, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
     " FROM products as pd" +
     " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
@@ -221,6 +221,7 @@ export const createProduct = (req, res) => {
     heDieuHanh: req.body.heDieuHanh,
     anh: req.body.anh,
     donGia: req.body.donGia,
+    soLuong: req.body.soLuong,
     baoHanh: req.body.baoHanh,
     mauSac: req.body.mauSac,
   };
@@ -229,7 +230,12 @@ export const createProduct = (req, res) => {
 };
 
 export const getProductByID = (req, res) => {
-  const queryCondition = "";
+  const queryCondition = "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.soLuong, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
+  " sp.ten as tenNhaCungCap, sp.id as supplierID, pd.id as promotionID, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
+  " FROM products as pd" +
+  " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
+  " INNER JOIN promotions as pt ON pt.id = pd.promotionID"+
+   ` WHERE pd.id = ${req.query.id}`;
   return getByID(req, res, constant.tableNameBD.PRODUCTS, queryCondition);
 };
 
@@ -243,6 +249,7 @@ export const updateProductByID = (req, res) => {
     heDieuHanh: req.body.heDieuHanh,
     anh: req.body.anh,
     donGia: req.body.donGia,
+    soLuong: req.body.soLuong,
     baoHanh: req.body.baoHanh,
     mauSac: req.body.mauSac,
   };
@@ -265,3 +272,4 @@ export const getAllPromotions = (req, res) => {
     querySearch
   );
 };
+

@@ -56,6 +56,9 @@ router.post("/product", getProductByID);
 router.post("/product/update", updateProductByID);
 router.post("/product/delete", deleteProductByID);
 
+//ProductDetails
+router.post("/productDetails/",getProductByID);
+
 // Promptions
 router.post("/promotions/all", getAllPromotions);
 

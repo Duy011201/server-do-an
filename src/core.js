@@ -74,7 +74,7 @@ export const getByID = (req, res, tableName, queryCondition) => {
     queryCondition === null ||
     queryCondition.length === 0
   ) {
-    query = `SELECT * FROM ${tableName} WHERE ${req.query.id}`;
+    query = `SELECT * FROM ${tableName} WHERE id = ${req.query.id}`;
   } else {
     query += queryCondition;
   }
