@@ -30,6 +30,8 @@ import {
   getAllSupplier,
   fogotPassword,
   getAllPromotions,
+  getProfileByID,
+  updateProfileByID,
 } from "./controller.js";
 
 const router = express.Router();
@@ -39,6 +41,8 @@ router.post("/login", Login);
 router.post("/login/create", createLogin);
 router.post("/forgot/update", fogotPassword);
 router.get("/login/all", getAllLogin);
+router.post("/profile",getProfileByID);
+router.post("/profile/update",updateProfileByID)
 
 // User
 router.post("/user/all", getAllUser);

@@ -138,6 +138,30 @@ export const fogotPassword = (req, res) => {
   return updatePassword(req, res, updateLogin);
 };
 
+export const getProfile = (req, res) => {
+  const queryCondition = `SELECT us.id, us.hoten, us.email, us.matKhau, us.sdt, us.roleID FROM ${constant.tableNameBD.USERS} as us`;
+  return getByID(req, res, constant.tableNameBD.USERS, queryCondition);
+};
+export const getProfileByID = (req, res) => {
+  const queryCondition = "SELECT us.id, us.hoten, us.email, us.matKhau, us.sdt, us.roleID" +
+  " FROM users as us " +
+  " INNER JOIN roles as rl ON rl.id = us.roleID" +
+   ` WHERE us.id = ${req.query.id}`;
+  return getByID(req, res, constant.tableNameBD.USERS, queryCondition); 
+};
+
+export const updateProfileByID = (req, res) => {
+  const updateProfile = {
+    id : req.body.id,
+    hoten: req.body.hoten,
+    matKhau: req.body.matKhau,
+    email: req.body.email,
+    sdt: req.body.sdt,
+    roleID: 1
+  };
+  
+  return update(req, res, constant.tableNameBD.USERS, updateProfile);
+};
 
 // CommentReview
 export const getAllComment = (req, res) => {
