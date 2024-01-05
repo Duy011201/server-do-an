@@ -3,7 +3,7 @@ import { getAll, getByID, create, update, deleteByID, signUpEmail,forgotEmail, u
 
 // User
 export const getAllUser = (req,res) => {
-  const queryCondition = "SELECT us.id, us.ten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
+  const queryCondition = "SELECT us.id, us.hoten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
   let querySearch = "";
   if (Object.keys(req.query).length !== 0) {
     querySearch += " WHERE ";
@@ -16,7 +16,7 @@ export const getAllUser = (req,res) => {
 
 export const createUser= (req, res) => {
   const newRole = {
-    ten: req.body.ten,
+    hoten: req.body.hoten,
     email: req.body.email,
     sdt: req.body.sdt,
     matKhau: "123456",
@@ -31,7 +31,7 @@ export const createUser= (req, res) => {
 export const updateUserByID = (req, res) => {
   const updateRole = {
     id : req.body.id,
-    ten: req.body.ten,
+    hoten: req.body.hoten,
     email: req.body.email,
     sdt: req.body.sdt,
     matKhau: "123456",
