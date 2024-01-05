@@ -11,9 +11,8 @@ import {
 } from "./core.js";
 
 // User
-export const getAllUser = (req, res) => {
-  const queryCondition =
-    "SELECT us.id, us.hoten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
+export const getAllUser = (req,res) => {
+  const queryCondition = "SELECT us.id, us.hoten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
   let querySearch = "";
   if (Object.keys(req.query).length !== 0) {
     querySearch += " WHERE ";
@@ -581,6 +580,24 @@ export const updateInvoiceDetailByID = (req, res) => {
 };
 
 // Report
+export const getAllReportInvoice = (req, res) => {
+  let queryCondition = "";
+  if (req.body.time === "MONTH") {
+    queryCondition +=
+      "SELECT MONTH(ngayTao) AS month, COUNT(id.soLuong) AS soLuong FROM invoicedetails as id GROUP BY month ORDER BY month";
+  } else if (req.body.time === "YEAR") {
+    queryCondition +=
+      "SELECT YEAR(ngayTao) AS year, COUNT(id.soLuong) AS soLuong FROM invoicedetails as id GROUP BY year ORDER BY year";
+  }
+  let querySearch = "";
+  return getAll(
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    queryCondition,
+    querySearch
+  );
+};
+
 export const getAllReportProduct = (req, res) => {
   let queryCondition = "";
   if (req.body.time === "MONTH") {
@@ -596,23 +613,58 @@ export const getAllReportProduct = (req, res) => {
     res,
     constant.tableNameBD.PRODUCTS,
     queryCondition,
-    querySearch
-  );
+    querySearch)
+}
+
+//Cart
+export const getCartByID = (req, res) => {
+  const queryCondition = "SELECT c.id, c.userID, c.productID	, c.soLuong, c.ngayTao, c.ngaySua, " +
+  " pd.ten, pd.donGia" +
+  " FROM cart as c" +
+  " INNER JOIN users as us ON c.userID = us.id" +
+  " INNER JOIN products as pd ON c.productID = pd.id";
+   ` WHERE c.id = ${req.query.id}`;
+  return getByID(req, res, constant.tableNameBD.CARTS, queryCondition);
 };
 
-export const getAllReportInvoice = (req, res) => {
-  let queryCondition = "";
-  if (req.body.time === "MONTH") {
-    queryCondition +=
-      "SELECT MONTH(ngayTao) AS month, COUNT(id.soLuong) AS soLuong FROM invoicedetails as id GROUP BY month ORDER BY month";
-  } else if (req.body.time === "YEAR") {
-    queryCondition +=
-      "SELECT YEAR(ngayTao) AS year, COUNT(id.soLuong) AS soLuong FROM invoicedetails as id GROUP BY year ORDER BY year";
-  }
+export const createCart = (req, res) => {
+
+  console.log(req.body);
+  
+  const newCart = {
+    userID: req.body.userID,
+    productID: req.body.productID,
+  };
+
+  return create(req, res, constant.tableNameBD.CARTS, newCart);
+};
+
+export const updateCartByID = (req, res) => {
+  const updateCart = {
+    id: req.body.id,
+    soLuong: req.body.soLuong,
+  };
+  return update(req, res, constant.tableNameBD.CARTS, updateCart);
+};
+
+export const deleteCartByID = (req, res) => {
+  return deleteByID(req, res, constant.tableNameBD.CARTS);
+};
+
+export const getAllCart = (req, res) => {
+  const queryCondition =
+    "SELECT  c.id, c.userID, c.productID, c.soLuong, c.ngayTao, c.ngaySua, " +
+    " pd.ten, pd.anh, pd.donGia, pr.code, pd.promotionID" +
+    " FROM carts as c" +
+    " INNER JOIN products as pd ON c.productID = pd.id"+
+    " INNER JOIN promotions as pr ON pd.promotionID = pr.id" +
+    " INNER JOIN users as us ON c.userID = us.id";
+    
   let querySearch = "";
+
   return getAll(
     res,
-    constant.tableNameBD.INVOICEDETAILS,
+    constant.tableNameBD.CARTS,
     queryCondition,
     querySearch
   );

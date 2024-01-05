@@ -48,6 +48,11 @@ import {
   deleteInvoiceDetailByID,
   getAllReportInvoice,
   getAllReportProduct,
+  createCart,
+  getAllCart,
+  getCartByID,
+  updateCartByID,
+  deleteCartByID,
 } from "./controller.js";
 
 const router = express.Router();
@@ -123,5 +128,12 @@ router.post("/invoice-detail/delete", deleteInvoiceDetailByID);
 // report
 router.post("/report/product", getAllReportProduct);
 router.post("/report/invoice", getAllReportInvoice);
+
+//Cart
+router.post("/cart/create", createCart);
+router.post("/cart/all", getAllCart);
+router.post("/cart", getCartByID);
+router.post("/cart/update", updateCartByID);
+router.post("/cart/delete", deleteCartByID);
 
 export default router;

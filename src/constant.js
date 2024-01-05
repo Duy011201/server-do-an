@@ -21,6 +21,7 @@ const constant = {
     INVOICES: "invoices",
     INVOICEDETAILS:"invoicedetails",
     USERS: "users",
+    CARTS: "carts"
   },
   commentStatus: {
     PENDING: "pending",
