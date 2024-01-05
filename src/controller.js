@@ -363,16 +363,237 @@ export const deleteProductByID = (req, res) => {
   return deleteByID(req, res, constant.tableNameBD.PRODUCTS);
 };
 
-//Promotions
-export const getAllPromotions = (req, res) => {
-  const queryCondition = "";
+// //Promotions
+// export const getAllPromotions = (req, res) => {
+//   const queryCondition = "";
+//   let querySearch = "";
+
+//   return getAll(
+//     res,
+//     constant.tableNameBD.PROMOTIONS,
+//     queryCondition,
+//     querySearch
+//   );
+// };
+// Promotion
+export const getAllPromotion = (req, res) => {
+  const queryCondition =
+    "SELECT pm.id,  pm.noiDung, pm.code, pm.tuNgay, pm.denNgay, pm.ngayTao, pm.ngaySua FROM promotions as pm";
+    // +
+    // " INNER JOIN products as pd ON pd.id = pm.productID";
+
   let querySearch = "";
+
+  // if (Object.keys(req.query).length !== 0) {
+  //   querySearch += " WHERE ";
+
+  //   // if (req.query.tenSanPham) {
+  //   //   querySearch += "pd.ten like " + `'${req.query.tenSanPham}'`;
+  //   // }
+  // }
 
   return getAll(
     res,
     constant.tableNameBD.PROMOTIONS,
     queryCondition,
     querySearch
+  );
+};
+
+export const getPromotionByID = (req, res) => {
+  const queryCondition = "";
+  return getByID(req, res, constant.tableNameBD.PROMOTIONS, queryCondition);
+};
+
+export const deletePromotionByID = (req, res) => {
+  // const deleteColumns = {
+  //   id: req.query.id,
+  // };
+  return deleteByID(req, res, constant.tableNameBD.PROMOTIONS);
+};
+
+export const createPromotion = (req, res) => {
+  const newPromotion = {
+    // productID: req.body.productID,
+    noiDung: req.body.noiDung,
+    code: req.body.code,
+    tuNgay: req.body.tuNgay,
+    denNgay: req.body.denNgay,
+  };
+
+  return create(req, res, constant.tableNameBD.PROMOTIONS, newPromotion);
+};
+
+export const updatePromotionByID = (req, res) => {
+  const updatePromotion = {
+    id: req.body.id,
+    // productID: req.body.productID,
+    noiDung: req.body.noiDung,
+    code: req.body.code,
+    tuNgay: req.body.tuNgay,
+    denNgay: req.body.denNgay,
+  };
+  // const updateColumns = {
+  //   id: req.body.id,
+  // };
+
+  return update(req, res, constant.tableNameBD.PROMOTIONS, updatePromotion);
+};
+
+
+
+
+// Invoice
+export const getAllInvoice = (req, res) => {
+  const queryCondition = `SELECT inv.id, inv.userID, inv.tongTien, inv.diaChiGiaoHang, inv.trangThai, inv.phuongThucThanhToan FROM ${constant.tableNameBD.INVOICES} as inv`;
+  let querySearch = "";
+
+  return getAll(
+    res,
+    constant.tableNameBD.INVOICES,
+    queryCondition,
+    querySearch
+  );
+};
+
+export const getInvoiceByID = (req, res) => {
+  const queryCondition = "";
+  return getByID(
+    req,
+    res,
+    constant.tableNameBD.INVOICES,
+    queryCondition
+  );
+};
+
+export const deleteInvoiceByID = (req, res) => {
+  // const deleteColumns = {
+  //   id: req.query.id,
+  // };
+  return deleteByID(
+    req,
+    res,
+    constant.tableNameBD.INVOICES,
+    // deleteColumns
+  );
+};
+
+export const createInvoice = (req, res) => {
+  const newInvoice = {
+    userID: req.body.userID,
+    tongTien: req.body.tongTien,
+    diaChiGiaoHang: req.body.diaChiGiaoHang,
+    trangThai: req.body.trangThai,
+    phuongThucThanhToan: req.body.phuongThucThanhToan,
+  };
+
+  return create(
+    req,
+    res,
+    constant.tableNameBD.INVOICES,
+    newInvoice
+  );
+};
+
+export const updateInvoiceByID = (req, res) => {
+  const updateInvoice = {
+    id: req.body.id,
+    userID: req.body.userID,
+    tongTien: req.body.tongTien,
+    diaChiGiaoHang: req.body.diaChiGiaoHang,
+    trangThai: req.body.trangThai,
+    phuongThucThanhToan: req.body.phuongThucThanhToan,
+  };
+
+  // const updateColumns = {
+  //   id: req.body.id,
+  // };
+
+  return update(
+    req,
+    res,
+    constant.tableNameBD.INVOICES,
+    updateInvoice,
+    // updateColumns
+  );
+};
+
+// Invoice Detail
+export const getAllInvoiceDetail = (req, res) => {
+  const queryCondition = `SELECT invdt.id, invdt.invoiceID , invdt.productID , invdt.soLuong, invdt.trangThai, invdt.tongTien, pd.ten as productName, pd.moTa FROM ${constant.tableNameBD.INVOICEDETAILS} as invdt ` +
+  `INNER JOIN ${constant.tableNameBD.PRODUCTS} as pd ON pd.id = invdt.productID`;
+  let querySearch = "";
+  // if (req.body.invoiceID && req.body.invoiceID !== "") {
+    querySearch += ` WHERE invdt.invoiceID = ${req.body.invoiceID}`;
+  // }
+
+  return getAll(
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    queryCondition,
+    querySearch
+  );
+};
+
+export const getInvoiceDetailByID = (req, res) => {
+  const queryCondition = "";
+  return getByID(
+    req,
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    queryCondition
+  );
+};
+
+export const deleteInvoiceDetailByID = (req, res) => {
+  // const deleteColumns = {
+  //   id: req.query.id,
+  // };
+  return deleteByID(
+    req,
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    // deleteColumns
+  );
+};
+
+export const createInvoiceDetail = (req, res) => {
+  const newInvoiceDetail = {
+    invoiceID: req.body.invoiceID,
+    productID: req.body.productID,
+    soLuong: req.body.soLuong,
+    trangThai: req.body.trangThai,
+    tongTien: req.body.tongTien,
+  };
+
+  return create(
+    req,
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    newInvoiceDetail
+  );
+};
+
+export const updateInvoiceDetailByID = (req, res) => {
+  const updateInvoiceDetail = {
+    id: req.body.id,
+    invoiceID: req.body.invoiceID,
+    productID: req.body.productID,
+    soLuong: req.body.soLuong,
+    trangThai: req.body.trangThai,
+    tongTien: req.body.tongTien,
+  };
+
+  // const updateColumns = {
+  //   id: req.body.id,
+  // };
+
+  return update(
+    req,
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    updateInvoiceDetail,
+    // updateColumns
   );
 };
 
