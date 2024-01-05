@@ -29,38 +29,36 @@ import {
   getSupplierByID,
   getAllSupplier,
   fogotPassword,
-  // getAllPromotions,
   getProfileByID,
   updateProfileByID,
-
   getAllPromotion,
   createPromotion,
   getPromotionByID,
   updatePromotionByID,
   deletePromotionByID,
-
   getAllInvoice,
   createInvoice,
   getInvoiceByID,
   updateInvoiceByID,
   deleteInvoiceByID,
-
   getAllInvoiceDetail,
   createInvoiceDetail,
   getInvoiceDetailByID,
   updateInvoiceDetailByID,
   deleteInvoiceDetailByID,
+  getAllReportInvoice,
+  getAllReportProduct,
 } from "./controller.js";
 
 const router = express.Router();
 //LOGIN
-router.post("/forgot/checkemail",checkEmail);
+router.post("/forgot/checkemail", checkEmail);
 router.post("/login", Login);
 router.post("/login/create", createLogin);
 router.post("/forgot/update", fogotPassword);
 router.get("/login/all", getAllLogin);
-router.post("/profile",getProfileByID);
-router.post("/profile/update",updateProfileByID)
+router.post("/profile", getProfileByID);
+router.post("/profile/update", updateProfileByID);
 
 // User
 router.post("/user/all", getAllUser);
@@ -97,7 +95,7 @@ router.post("/product/update", updateProductByID);
 router.post("/product/delete", deleteProductByID);
 
 //ProductDetails
-router.post("/productDetails/",getProductByID);
+router.post("/productDetails/", getProductByID);
 
 // Promptions
 
@@ -122,5 +120,8 @@ router.post("/invoice-detail/update", updateInvoiceDetailByID);
 router.post("/invoice-detail/create", createInvoiceDetail);
 router.post("/invoice-detail/delete", deleteInvoiceDetailByID);
 
+// report
+router.post("/report/product", getAllReportProduct);
+router.post("/report/invoice", getAllReportInvoice);
 
 export default router;

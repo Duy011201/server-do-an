@@ -1,9 +1,19 @@
 import constant from "./constant.js";
-import { getAll, getByID, create, update, deleteByID, signUpEmail,forgotEmail, updatePassword } from "./core.js";
+import {
+  getAll,
+  getByID,
+  create,
+  update,
+  deleteByID,
+  signUpEmail,
+  forgotEmail,
+  updatePassword,
+} from "./core.js";
 
 // User
-export const getAllUser = (req,res) => {
-  const queryCondition = "SELECT us.id, us.hoten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
+export const getAllUser = (req, res) => {
+  const queryCondition =
+    "SELECT us.id, us.hoten, us.email, us.sdt, us.matKhau, us.roleID,GROUP_CONCAT(DISTINCT roles.code) AS roleCodes FROM users AS us inner join roles on FIND_IN_SET(roles.id, us.roleID) > 0 GROUP BY us.id";
   let querySearch = "";
   if (Object.keys(req.query).length !== 0) {
     querySearch += " WHERE ";
@@ -14,13 +24,13 @@ export const getAllUser = (req,res) => {
   return getAll(res, constant.tableNameBD.USERS, queryCondition, querySearch);
 };
 
-export const createUser= (req, res) => {
+export const createUser = (req, res) => {
   const newRole = {
     hoten: req.body.hoten,
     email: req.body.email,
     sdt: req.body.sdt,
     matKhau: "123456",
-    roleID: req.body.roleID.join(",")
+    roleID: req.body.roleID.join(","),
   };
 
   // console.log(newRole);
@@ -30,12 +40,12 @@ export const createUser= (req, res) => {
 
 export const updateUserByID = (req, res) => {
   const updateRole = {
-    id : req.body.id,
+    id: req.body.id,
     hoten: req.body.hoten,
     email: req.body.email,
     sdt: req.body.sdt,
     matKhau: "123456",
-    roleID: req.body.roleID.join(",")
+    roleID: req.body.roleID.join(","),
   };
 
   return update(req, res, constant.tableNameBD.USERS, updateRole);
@@ -48,7 +58,7 @@ export const deleteUserByID = (req, res) => {
 export const getAllRole = (req, res) => {
   const queryCondition = "select * from roles";
   let querySearch = "";
-  return getAll(res, constant.tableNameBD.ROLES, queryCondition, querySearch );
+  return getAll(res, constant.tableNameBD.ROLES, queryCondition, querySearch);
 };
 
 export const getByRoleID = (req, res) => {
@@ -56,9 +66,9 @@ export const getByRoleID = (req, res) => {
   return getByID(req, res, constant.tableNameBD.ROLES, queryCondition);
 };
 
-export const createRole= (req, res) => {
+export const createRole = (req, res) => {
   const newRole = {
-    code: req.body.code 
+    code: req.body.code,
   };
 
   return create(req, res, constant.tableNameBD.ROLES, newRole);
@@ -66,10 +76,10 @@ export const createRole= (req, res) => {
 
 export const updateRoleByID = (req, res) => {
   const updateRole = {
-    id : req.body.id,
+    id: req.body.id,
     code: req.body.code,
   };
-  
+
   return update(req, res, constant.tableNameBD.ROLES, updateRole);
 };
 export const deleteRoleByID = (req, res) => {
@@ -80,12 +90,7 @@ export const deleteRoleByID = (req, res) => {
 export const Login = (req, res) => {
   const queryCondition = `SELECT * FROM ${constant.tableNameBD.USERS} as us where us.email = '${req.body.email}' and us.matKhau = '${req.body.matKhau}'`;
   let querySearch = "";
-  return getAll(
-    res,
-    constant.tableNameBD.USERS,
-    queryCondition,
-    querySearch
-  );
+  return getAll(res, constant.tableNameBD.USERS, queryCondition, querySearch);
 };
 
 export const getAllLogin = (req, res) => {
@@ -99,12 +104,7 @@ export const getAllLogin = (req, res) => {
   if (req.query.email) {
     querySearch += "us.email like" + `'${req.query.email}'`;
   }
-  return getAll(
-    res,
-    constant.tableNameBD.USERS,
-    queryCondition,
-    querySearch
-  );
+  return getAll(res, constant.tableNameBD.USERS, queryCondition, querySearch);
 };
 export const createLogin = (req, res) => {
   const newUser = {
@@ -112,28 +112,27 @@ export const createLogin = (req, res) => {
     email: req.body.email,
     sdt: "",
     matKhau: req.body.password,
-    roleID: 1
+    roleID: 1,
   };
   return signUpEmail(req, res, newUser);
 };
-export const checkEmail = (req, res)=>{
-  const checkEmail= {
+export const checkEmail = (req, res) => {
+  const checkEmail = {
     id: req.body.id,
     email: req.body.email,
-    hoten:"",
+    hoten: "",
     matKhau: "",
-    roleID:1
+    roleID: 1,
   };
 
-  return forgotEmail(req,res,checkEmail);
-}
+  return forgotEmail(req, res, checkEmail);
+};
 
 export const fogotPassword = (req, res) => {
-
   const updateLogin = {
     email: req.body.email,
     matKhau: req.body.matKhau,
-    roleID:1
+    roleID: 1,
   };
   return updatePassword(req, res, updateLogin);
 };
@@ -143,23 +142,24 @@ export const getProfile = (req, res) => {
   return getByID(req, res, constant.tableNameBD.USERS, queryCondition);
 };
 export const getProfileByID = (req, res) => {
-  const queryCondition = "SELECT us.id, us.hoten, us.email, us.matKhau, us.sdt, us.roleID" +
-  " FROM users as us " +
-  " INNER JOIN roles as rl ON rl.id = us.roleID" +
-   ` WHERE us.id = ${req.query.id}`;
-  return getByID(req, res, constant.tableNameBD.USERS, queryCondition); 
+  const queryCondition =
+    "SELECT us.id, us.hoten, us.email, us.matKhau, us.sdt, us.roleID" +
+    " FROM users as us " +
+    " INNER JOIN roles as rl ON rl.id = us.roleID" +
+    ` WHERE us.id = ${req.query.id}`;
+  return getByID(req, res, constant.tableNameBD.USERS, queryCondition);
 };
 
 export const updateProfileByID = (req, res) => {
   const updateProfile = {
-    id : req.body.id,
+    id: req.body.id,
     hoten: req.body.hoten,
     matKhau: req.body.matKhau,
     email: req.body.email,
     sdt: req.body.sdt,
-    roleID: 1
+    roleID: 1,
   };
-  
+
   return update(req, res, constant.tableNameBD.USERS, updateProfile);
 };
 
@@ -173,8 +173,8 @@ export const getAllComment = (req, res) => {
 
   let querySearch = "";
 
-    if (Object.keys(req.query).length !== 0) {
-      querySearch += " WHERE ";
+  if (Object.keys(req.query).length !== 0) {
+    querySearch += " WHERE ";
 
     if (req.query.tenSanPham) {
       querySearch += "pd.ten like " + `'${req.query.tenSanPham}'`;
@@ -313,9 +313,8 @@ export const getAllProduct = (req, res) => {
 };
 
 export const createProduct = (req, res) => {
-
   console.log(req.body);
-  
+
   const newProduct = {
     promotionID: req.body.promotionID,
     supplierID: req.body.supplierID,
@@ -333,12 +332,13 @@ export const createProduct = (req, res) => {
 };
 
 export const getProductByID = (req, res) => {
-  const queryCondition = "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.soLuong, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
-  " sp.ten as tenNhaCungCap, sp.id as supplierID, pd.id as promotionID, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
-  " FROM products as pd" +
-  " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
-  " INNER JOIN promotions as pt ON pt.id = pd.promotionID"+
-   ` WHERE pd.id = ${req.query.id}`;
+  const queryCondition =
+    "SELECT pd.id, pd.ten, pd.moTa, pd.heDieuHanh, pd.anh, pd.donGia, pd.soLuong, pd.baoHanh, pd.mauSac, pd.ngayTao, pd.ngaySua, " +
+    " sp.ten as tenNhaCungCap, sp.id as supplierID, pd.id as promotionID, pt.code, pt.noiDung, pt.tuNgay, pt.denNgay" +
+    " FROM products as pd" +
+    " INNER JOIN suppliers as sp ON sp.id = pd.supplierID" +
+    " INNER JOIN promotions as pt ON pt.id = pd.promotionID" +
+    ` WHERE pd.id = ${req.query.id}`;
   return getByID(req, res, constant.tableNameBD.PRODUCTS, queryCondition);
 };
 
@@ -379,8 +379,8 @@ export const deleteProductByID = (req, res) => {
 export const getAllPromotion = (req, res) => {
   const queryCondition =
     "SELECT pm.id,  pm.noiDung, pm.code, pm.tuNgay, pm.denNgay, pm.ngayTao, pm.ngaySua FROM promotions as pm";
-    // +
-    // " INNER JOIN products as pd ON pd.id = pm.productID";
+  // +
+  // " INNER JOIN products as pd ON pd.id = pm.productID";
 
   let querySearch = "";
 
@@ -440,9 +440,6 @@ export const updatePromotionByID = (req, res) => {
   return update(req, res, constant.tableNameBD.PROMOTIONS, updatePromotion);
 };
 
-
-
-
 // Invoice
 export const getAllInvoice = (req, res) => {
   const queryCondition = `SELECT inv.id, inv.userID, inv.tongTien, inv.diaChiGiaoHang, inv.trangThai, inv.phuongThucThanhToan FROM ${constant.tableNameBD.INVOICES} as inv`;
@@ -458,12 +455,7 @@ export const getAllInvoice = (req, res) => {
 
 export const getInvoiceByID = (req, res) => {
   const queryCondition = "";
-  return getByID(
-    req,
-    res,
-    constant.tableNameBD.INVOICES,
-    queryCondition
-  );
+  return getByID(req, res, constant.tableNameBD.INVOICES, queryCondition);
 };
 
 export const deleteInvoiceByID = (req, res) => {
@@ -473,7 +465,7 @@ export const deleteInvoiceByID = (req, res) => {
   return deleteByID(
     req,
     res,
-    constant.tableNameBD.INVOICES,
+    constant.tableNameBD.INVOICES
     // deleteColumns
   );
 };
@@ -487,12 +479,7 @@ export const createInvoice = (req, res) => {
     phuongThucThanhToan: req.body.phuongThucThanhToan,
   };
 
-  return create(
-    req,
-    res,
-    constant.tableNameBD.INVOICES,
-    newInvoice
-  );
+  return create(req, res, constant.tableNameBD.INVOICES, newInvoice);
 };
 
 export const updateInvoiceByID = (req, res) => {
@@ -513,18 +500,19 @@ export const updateInvoiceByID = (req, res) => {
     req,
     res,
     constant.tableNameBD.INVOICES,
-    updateInvoice,
+    updateInvoice
     // updateColumns
   );
 };
 
 // Invoice Detail
 export const getAllInvoiceDetail = (req, res) => {
-  const queryCondition = `SELECT invdt.id, invdt.invoiceID , invdt.productID , invdt.soLuong, invdt.trangThai, invdt.tongTien, pd.ten as productName, pd.moTa FROM ${constant.tableNameBD.INVOICEDETAILS} as invdt ` +
-  `INNER JOIN ${constant.tableNameBD.PRODUCTS} as pd ON pd.id = invdt.productID`;
+  const queryCondition =
+    `SELECT invdt.id, invdt.invoiceID , invdt.productID , invdt.soLuong, invdt.trangThai, invdt.tongTien, pd.ten as productName, pd.moTa FROM ${constant.tableNameBD.INVOICEDETAILS} as invdt ` +
+    `INNER JOIN ${constant.tableNameBD.PRODUCTS} as pd ON pd.id = invdt.productID`;
   let querySearch = "";
   // if (req.body.invoiceID && req.body.invoiceID !== "") {
-    querySearch += ` WHERE invdt.invoiceID = ${req.body.invoiceID}`;
+  querySearch += ` WHERE invdt.invoiceID = ${req.body.invoiceID}`;
   // }
 
   return getAll(
@@ -537,12 +525,7 @@ export const getAllInvoiceDetail = (req, res) => {
 
 export const getInvoiceDetailByID = (req, res) => {
   const queryCondition = "";
-  return getByID(
-    req,
-    res,
-    constant.tableNameBD.INVOICEDETAILS,
-    queryCondition
-  );
+  return getByID(req, res, constant.tableNameBD.INVOICEDETAILS, queryCondition);
 };
 
 export const deleteInvoiceDetailByID = (req, res) => {
@@ -552,7 +535,7 @@ export const deleteInvoiceDetailByID = (req, res) => {
   return deleteByID(
     req,
     res,
-    constant.tableNameBD.INVOICEDETAILS,
+    constant.tableNameBD.INVOICEDETAILS
     // deleteColumns
   );
 };
@@ -592,8 +575,45 @@ export const updateInvoiceDetailByID = (req, res) => {
     req,
     res,
     constant.tableNameBD.INVOICEDETAILS,
-    updateInvoiceDetail,
+    updateInvoiceDetail
     // updateColumns
   );
 };
 
+// Report
+export const getAllReportProduct = (req, res) => {
+  let queryCondition = "";
+  if (req.body.time === "MONTH") {
+    queryCondition +=
+      "SELECT MONTH(ngayTao) AS month, COUNT(pd.soLuong) AS soLuong FROM products as pd GROUP BY month ORDER BY month";
+  } else if (req.body.time === "YEAR") {
+    queryCondition +=
+      "SELECT YEAR(ngayTao) AS year, COUNT(pd.soLuong) AS soLuong FROM products as pd GROUP BY year ORDER BY year";
+  }
+
+  let querySearch = "";
+  return getAll(
+    res,
+    constant.tableNameBD.PRODUCTS,
+    queryCondition,
+    querySearch
+  );
+};
+
+export const getAllReportInvoice = (req, res) => {
+  let queryCondition = "";
+  if (req.body.time === "MONTH") {
+    queryCondition +=
+      "SELECT MONTH(ngayTao) AS month, COUNT(id.soLuong) AS soLuong FROM invoicedetails as id GROUP BY month ORDER BY month";
+  } else if (req.body.time === "YEAR") {
+    queryCondition +=
+      "SELECT YEAR(ngayTao) AS year, COUNT(id.soLuong) AS soLuong FROM invoicedetails as id GROUP BY year ORDER BY year";
+  }
+  let querySearch = "";
+  return getAll(
+    res,
+    constant.tableNameBD.INVOICEDETAILS,
+    queryCondition,
+    querySearch
+  );
+};
