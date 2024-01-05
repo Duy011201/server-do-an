@@ -18,6 +18,8 @@ const constant = {
     SUPPlIERS: "suppliers",
     PRODUCTS: "products",
     PROMOTIONS: "promotions",
+    INVOICES: "invoices",
+    INVOICEDETAILS:"invoicedetails",
     USERS: "users",
   },
   commentStatus: {
